@@ -9,7 +9,6 @@ void setup()
     Serial.begin(9600);
 
     OLED::initOLED();
-    TRANSMITTER trns;
     TRANSMITTER::initESP();
     TRANSMITTER::configAGNSNodes();
     CLOCK::initClock();
