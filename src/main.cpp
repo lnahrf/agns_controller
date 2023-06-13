@@ -1,24 +1,19 @@
 #include <Arduino.h>
-#include <string>
 #include "oled.h"
 #include "transmitter.h"
+#include "clock.h"
+#include "env.h"
 
 void setup()
 {
     Serial.begin(9600);
 
     OLED::initOLED();
-
-    delay(1000);
-
-    bool esp_init = TRANSMITTER::initESP();
-    if (!esp_init)
-    {
-        OLED::write(ESP_INIT_FAILED);
-        for (;;)
-            ;
-    }
-    OLED::write(ESP_INIT_SUCCESS);
+    TRANSMITTER trns;
+    TRANSMITTER::initESP();
+    TRANSMITTER::configAGNSNodes();
+    CLOCK::initClock();
+    OLED::mainScreen(TRANSMITTER::printNodesConnected());
 }
 
 void loop()
