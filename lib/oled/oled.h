@@ -16,7 +16,7 @@
 
 #define OLED_ALLOC_SUCCESS "SSD1306 allocation successful"
 #define OLED_ALLOC_FAILURE "SSD1306 allocation failed"
-#define OLED_INITIATED "OLED initiated"
+#define OLED_INITIATED "Initiated OLED"
 
 Adafruit_SSD1306 instance(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
@@ -25,7 +25,7 @@ class OLED
 public:
     static bool initOLED();
     static void write(const std::string &s);
-    static void mainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date);
+    static void renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date);
 };
 
 bool OLED::initOLED()
@@ -55,10 +55,10 @@ void OLED::write(const std::string &s)
     instance.println(s.c_str());
     instance.display();
     Serial.println(s.c_str());
-    delay(300);
+    delay(600);
 }
 
-void OLED::mainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date)
+void OLED::renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date)
 {
     instance.clearDisplay();
     instance.setTextSize(1);

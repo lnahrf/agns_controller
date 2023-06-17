@@ -2,6 +2,7 @@
 #include "oled.h"
 #include "transmitter.h"
 #include "clock.h"
+#include "eeprom_io.h"
 #include "env.h"
 
 void setup()
@@ -9,15 +10,16 @@ void setup()
     Serial.begin(9600);
 
     OLED::initOLED();
+    EEPROM_IO::initEEPROM();
     TRANSMITTER::initESP();
     TRANSMITTER::configAGNSNodes();
     CLOCK::initClock();
-    OLED::mainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
+    OLED::renderMainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
 }
 
 void loop()
 {
     CLOCK::updateClient();
-    delay(5000);
-    OLED::mainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
+    OLED::renderMainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
+    delay(10000);
 }

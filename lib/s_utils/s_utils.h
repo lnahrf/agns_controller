@@ -9,6 +9,8 @@ class S_UTILS
 {
 public:
     static std::vector<std::string> splitString(const std::string &s, const std::string &r);
+    static std::string replaceSubstr(const std::string &original, const std::string &target, const std::string &replacement);
+    static std::string removeNullTerminators(const std::string &s);
 };
 
 std::vector<std::string> S_UTILS::splitString(const std::string &s, const std::string &r)
@@ -19,5 +21,26 @@ std::vector<std::string> S_UTILS::splitString(const std::string &s, const std::s
         last;
     return {first, last};
 }
+
+std::string S_UTILS::replaceSubstr(const std::string &original, const std::string &target, const std::string &replacement)
+{
+    std::size_t startPos = original.find(target);
+    std::string result = "";
+    if (startPos != std::string::npos)
+    {
+        result = original.substr(0, startPos) + replacement + original.substr(startPos + target.length());
+    }
+
+    return result;
+};
+
+std::string S_UTILS::removeNullTerminators(const std::string &s)
+{
+    std::string result = s.c_str();
+    result.erase(std::remove_if(result.begin(), result.end(), [](char c)
+                                { return c == '\0'; }),
+                 result.end());
+    return result;
+};
 
 #endif

@@ -9,7 +9,7 @@
 #include "env.h"
 
 #define ESP_INIT_FAILED "Failed to init ESP"
-#define ESP_INIT_SUCCESS "ESP initiated"
+#define ESP_INIT_SUCCESS "Initiated ESP"
 #define ESP_AGNS_CONFIG_FAILED "Failed to configure AGNS node"
 #define ESP_AGNS_CONFIG_SUCCESS "AGNS node configured"
 #define ESP_AGNS_NODES_CONNECTED "AGNS nodes registered: "

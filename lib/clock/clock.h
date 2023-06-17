@@ -13,7 +13,7 @@
 
 #define CONNECTING_TO_NETWORK "Connecting to network"
 #define NETWORK_CONNECTED "Network connected!"
-#define CLOCK_INITIATED "Clock initiated"
+#define CLOCK_INITIATED "Initiated CLOCK"
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_POOL, NTP_TZ_OFFSET_S + NTP_DAYLIGHT_OFFSET_S);
@@ -39,7 +39,7 @@ void CLOCK::initClock()
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while (WiFi.status() != WL_CONNECTED)
     {
-        delay(1000);
+        delay(600);
         OLED::write(CONNECTING_TO_NETWORK);
     }
 
