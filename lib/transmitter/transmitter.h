@@ -12,7 +12,9 @@
 #define ESP_INIT_SUCCESS "ESP initiated"
 #define ESP_AGNS_CONFIG_FAILED "Failed to configure AGNS node"
 #define ESP_AGNS_CONFIG_SUCCESS "AGNS node configured"
-#define ESP_AGNS_NODES_CONNECTED "AGNS nodes connected: "
+#define ESP_AGNS_NODES_CONNECTED "AGNS nodes registered: "
+#define ESP_SIGNAL_SENT "AGNS sent signal successfuly"
+#define ESP_SIGNAL_FAILED "AGNS failed to send signal"
 
 typedef struct message
 {
@@ -98,11 +100,11 @@ void TRANSMITTER::sendSignal()
         esp_err_t result = esp_now_send(nodes[i].broadcastAddress, (uint8_t *)&payload, sizeof(payload));
         if (result != ESP_OK)
         {
-            Serial.println("Error sending signal to");
+            Serial.println(ESP_SIGNAL_FAILED);
         }
         else
         {
-            Serial.println("Sent signal successfuly to");
+            Serial.println(ESP_SIGNAL_SENT);
         }
     }
 };

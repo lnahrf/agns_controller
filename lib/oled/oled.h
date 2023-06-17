@@ -25,7 +25,7 @@ class OLED
 public:
     static bool initOLED();
     static void write(const std::string &s);
-    static void mainScreen(const std::string &nodesConnected);
+    static void mainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date);
 };
 
 bool OLED::initOLED()
@@ -54,21 +54,23 @@ void OLED::write(const std::string &s)
     instance.setCursor(0, 0);
     instance.println(s.c_str());
     instance.display();
-    delay(1000);
+    Serial.println(s.c_str());
+    delay(300);
 }
 
-void OLED::mainScreen(const std::string &nodesConnected)
+void OLED::mainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date)
 {
     instance.clearDisplay();
-    instance.setCursor(0, 0);
     instance.setTextSize(1);
     instance.setTextColor(WHITE);
     instance.setCursor(0, 5);
     instance.println("AGNS");
+    instance.setCursor(30, 5);
+    instance.println(time.substr(0, 5).c_str());
+    instance.setCursor(65, 5);
+    instance.println(date.c_str());
     instance.setCursor(0, 15);
-    instance.println("Nodes online:");
-    instance.display();
-
+    instance.println("Nodes registered:");
     instance.setTextSize(3);
     instance.setCursor(0, 35);
     instance.println(nodesConnected.c_str());

@@ -12,9 +12,12 @@ void setup()
     TRANSMITTER::initESP();
     TRANSMITTER::configAGNSNodes();
     CLOCK::initClock();
-    OLED::mainScreen(TRANSMITTER::printNodesConnected());
+    OLED::mainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
 }
 
 void loop()
 {
+    CLOCK::updateClient();
+    delay(5000);
+    OLED::mainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
 }
