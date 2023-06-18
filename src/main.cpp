@@ -8,6 +8,9 @@
 #include "web.h"
 #include "env.h"
 
+unsigned long previousTime = 0;
+const int interval = 10000;
+
 void setup()
 {
     Serial.begin(9600);
@@ -17,18 +20,28 @@ void setup()
     NETWORK::connect();
     WEB::initServer();
     CLOCK::initClock();
-
     EEPROM_IO::initEEPROM();
     TRANSMITTER::initESP();
     TRANSMITTER::configAGNSNodes();
 
-    OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), WEB::getIp());
+    OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), NETWORK::getIp());
+}
+
+void intervalHandler()
+{
+    unsigned long currentTime = millis();
+
+    if (currentTime - previousTime >= interval)
+    {
+        CLOCK::updateClient();
+        previousTime = currentTime;
+    }
 }
 
 void loop()
 {
-    CLOCK::updateClient();
-    OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), WEB::getIp());
+    intervalHandler();
     NETWORK::validateConnection();
+    OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), NETWORK::getIp());
     delay(3000);
 }

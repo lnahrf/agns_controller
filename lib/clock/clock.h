@@ -3,9 +3,6 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 #include <string>
-#include <WiFi.h>
-#include <NTPClient.h>
-#include <WiFiUdp.h>
 #include "time.h"
 #include "oled.h"
 #include "frequencies.h"
@@ -13,97 +10,69 @@
 
 #define CLOCK_INITIATED "Initiated CLOCK"
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, NTP_POOL, NTP_TZ_OFFSET_S + NTP_DAYLIGHT_OFFSET_S);
+struct tm timeinfo;
 
 class CLOCK
 {
+
 public:
     static void initClock();
     static void updateClient();
     static int getWeekDay();
-    static std::string getWeekDayString();
-    static std::string getMonthDay();
-    static std::string getMonth();
-    static std::string getYear();
+    static int getMonthDay();
+    static int getMonth();
+    static int getYear();
     static std::string getTime();
     static std::string getDate();
 };
 
 void CLOCK::initClock()
 {
-    timeClient.begin();
-    timeClient.update();
+    configTime(NTP_TZ_OFFSET_S, NTP_DAYLIGHT_OFFSET_S, NTP_POOL);
+    getLocalTime(&timeinfo);
     OLED::write(CLOCK_INITIATED);
 };
 
 void CLOCK::updateClient()
 {
-    timeClient.update();
-};
-
-std::string CLOCK::getTime()
-{
-    return timeClient.getFormattedTime().c_str();
-};
-
-std::string CLOCK::getWeekDayString()
-{
-    int day = timeClient.getDay();
-    switch (day)
-    {
-    case 0:
-        return SUNDAY;
-    case 1:
-        return MONDAY;
-    case 2:
-        return TUESDAY;
-    case 3:
-        return WEDNESDAY;
-    case 4:
-        return THURSDAY;
-    case 5:
-        return FRIDAY;
-    case 6:
-        return SATURDAY;
-    default:
-        return SUNDAY;
-    };
+    getLocalTime(&timeinfo);
 };
 
 int CLOCK::getWeekDay()
 {
-    return timeClient.getDay() + 1;
+    return timeinfo.tm_wday;
 };
 
-std::string CLOCK::getMonthDay()
+int CLOCK::getMonthDay()
 {
-    time_t time = timeClient.getEpochTime();
-    tm *formatted = localtime(&time);
-    uint8_t monthDay = formatted->tm_mday;
-    return std::to_string(monthDay);
+    return timeinfo.tm_mday;
 };
 
-std::string CLOCK::getMonth()
+int CLOCK::getMonth()
 {
-    time_t time = timeClient.getEpochTime();
-    tm *formatted = localtime(&time);
-    uint8_t month = formatted->tm_mon + 1;
-    return std::to_string(month);
+
+    return timeinfo.tm_mon + 1;
 };
 
-std::string CLOCK::getYear()
+int CLOCK::getYear()
 {
-    time_t time = timeClient.getEpochTime();
-    tm *formatted = localtime(&time);
-    uint8_t year = formatted->tm_year;
-    return std::to_string(year + 1900);
+    return timeinfo.tm_year + 1900;
+};
+
+std::string CLOCK::getTime()
+{
+    std::string hour = timeinfo.tm_hour < 10 ? "0" + std::to_string(timeinfo.tm_hour) : std::to_string(timeinfo.tm_hour);
+    std::string minutes = timeinfo.tm_min < 10 ? "0" + std::to_string(timeinfo.tm_min) : std::to_string(timeinfo.tm_min);
+    return hour + ":" + minutes;
 };
 
 std::string CLOCK::getDate()
 {
     std::string sep = "/";
-    return getMonthDay().c_str() + sep + getMonth().c_str() + sep + getYear().c_str();
+    std::string monthDay = std::to_string(getMonthDay());
+    std::string month = std::to_string(getMonth());
+    std::string year = std::to_string(getYear());
+    return monthDay + sep + month + sep + year;
 };
 
 #endif

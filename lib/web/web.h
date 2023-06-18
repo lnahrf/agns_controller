@@ -5,7 +5,9 @@
 #include <ESPAsyncWebServer.h>
 #include <string>
 #include <SPIFFS.h>
+#include <ArduinoJson.h>
 #include "oled.h"
+#include "eeprom_io.h"
 #include "env.h"
 
 #define WEB_INIT_SUCCESS "Initiated WEB"
@@ -19,10 +21,11 @@ private:
     static void rootRouter(AsyncWebServerRequest *request);
     static void styleRouter(AsyncWebServerRequest *request);
     static void assetsRouter(AsyncWebServerRequest *request);
+    static void scheduleGETRouter(AsyncWebServerRequest *request);
+    static void schedulePOSTRouter(AsyncWebServerRequest *request);
 
 public:
     static void initServer();
-    static std::string getIp();
 };
 
 void WEB::notFound(AsyncWebServerRequest *request)
@@ -64,18 +67,36 @@ void WEB::assetsRouter(AsyncWebServerRequest *request)
     return request->client()->close();
 };
 
+void WEB::scheduleGETRouter(AsyncWebServerRequest *request)
+{
+    Serial.println("In get schedule");
+    std::string schedule = EEPROM_IO::readSchedule();
+
+    DynamicJsonDocument doc(1024);
+    doc["schedule"] = schedule.length() > 0 ? schedule : "";
+
+    String jsonStringified;
+    serializeJson(doc, jsonStringified);
+
+    request->send(200, "application/json", jsonStringified);
+
+    return request->client()->close();
+};
+
+void WEB::schedulePOSTRouter(AsyncWebServerRequest *request){
+    // add to Schedule
+    // remove from schedule
+
+};
+
 void WEB::initServer()
 {
     server.on("/", HTTP_GET, rootRouter);
     server.on("/styles/*", HTTP_GET, styleRouter);
     server.on("/assets/*", HTTP_GET, assetsRouter);
+    server.on("/schedule", HTTP_GET, scheduleGETRouter);
     server.begin();
     OLED::write(WEB_INIT_SUCCESS);
-}
-
-std::string WEB::getIp()
-{
-    return WiFi.localIP().toString().c_str();
 }
 
 #endif
