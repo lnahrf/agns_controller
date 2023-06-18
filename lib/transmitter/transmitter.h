@@ -48,7 +48,6 @@ public:
 
 void TRANSMITTER::initESP()
 {
-    WiFi.mode(WIFI_STA);
     if (esp_now_init() != ESP_OK)
     {
         OLED::write(ESP_INIT_FAILED);

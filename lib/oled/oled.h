@@ -73,6 +73,8 @@ void OLED::renderMainScreen(const std::string &nodesConnected, const std::string
     instance.println(date.c_str());
 
     instance.setCursor(0, 10);
+    instance.println("IP: ");
+    instance.setCursor(20, 10);
     instance.println(ip.c_str());
 
     instance.setCursor(0, 20);

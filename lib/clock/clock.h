@@ -11,19 +11,15 @@
 #include "frequencies.h"
 #include "env.h"
 
-#define CONNECTING_TO_NETWORK_CLOCK "Connecting CLOCK"
-#define NETWORK_CONNECTED_CLOCK "Connected CLOCK!"
 #define CLOCK_INITIATED "Initiated CLOCK"
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, NTP_POOL, NTP_TZ_OFFSET_S + NTP_DAYLIGHT_OFFSET_S);
-bool connected = false;
 
 class CLOCK
 {
 public:
     static void initClock();
-    static bool getConnectionStatus();
     static void updateClient();
     static int getWeekDay();
     static std::string getWeekDayString();
@@ -36,23 +32,9 @@ public:
 
 void CLOCK::initClock()
 {
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        OLED::write(CONNECTING_TO_NETWORK_CLOCK);
-    }
-
-    connected = true;
-    OLED::write(NETWORK_CONNECTED_CLOCK);
-
     timeClient.begin();
     timeClient.update();
     OLED::write(CLOCK_INITIATED);
-};
-
-bool CLOCK::getConnectionStatus()
-{
-    return connected;
 };
 
 void CLOCK::updateClient()
