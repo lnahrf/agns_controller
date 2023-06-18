@@ -7,6 +7,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <string>
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -25,7 +26,7 @@ class OLED
 public:
     static bool initOLED();
     static void write(const std::string &s);
-    static void renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date);
+    static void renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date, const std::string &ip);
 };
 
 bool OLED::initOLED()
@@ -58,21 +59,26 @@ void OLED::write(const std::string &s)
     delay(600);
 }
 
-void OLED::renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date)
+void OLED::renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date, const std::string &ip)
 {
     instance.clearDisplay();
     instance.setTextSize(1);
     instance.setTextColor(WHITE);
-    instance.setCursor(0, 5);
+
+    instance.setCursor(0, 0);
     instance.println("AGNS");
-    instance.setCursor(30, 5);
+    instance.setCursor(30, 0);
     instance.println(time.substr(0, 5).c_str());
-    instance.setCursor(65, 5);
+    instance.setCursor(65, 0);
     instance.println(date.c_str());
-    instance.setCursor(0, 15);
+
+    instance.setCursor(0, 10);
+    instance.println(ip.c_str());
+
+    instance.setCursor(0, 20);
     instance.println("Nodes registered:");
     instance.setTextSize(3);
-    instance.setCursor(0, 35);
+    instance.setCursor(0, 40);
     instance.println(nodesConnected.c_str());
     instance.display();
 }

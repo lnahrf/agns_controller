@@ -9,7 +9,7 @@
 #include "env.h"
 
 #define INITIATED_EEPROM "Initiated EEPROM"
-int SCHEDULE_ADDRESS = 0;
+const int SCHEDULE_ADDRESS = 0;
 
 class EEPROM_IO
 {

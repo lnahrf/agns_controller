@@ -3,7 +3,11 @@
 #include "transmitter.h"
 #include "clock.h"
 #include "eeprom_io.h"
+#include "webgui.h"
 #include "env.h"
+
+unsigned long previousTime = 0;
+const int interval = 10000;
 
 void setup()
 {
@@ -14,12 +18,23 @@ void setup()
     TRANSMITTER::initESP();
     TRANSMITTER::configAGNSNodes();
     CLOCK::initClock();
-    OLED::renderMainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
+    WEBGUI::initServer();
+    OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), WEBGUI::getIp());
+}
+
+void intervalHandler()
+{
+    unsigned long currentTime = millis();
+    if (currentTime - previousTime >= interval)
+    {
+        previousTime = currentTime;
+        CLOCK::updateClient();
+        OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), WEBGUI::getIp());
+    }
 }
 
 void loop()
 {
-    CLOCK::updateClient();
-    OLED::renderMainScreen(TRANSMITTER::printNodesConnected(), CLOCK::getTime(), CLOCK::getDate());
-    delay(10000);
+    WEBGUI::handleRequests();
+    intervalHandler();
 }

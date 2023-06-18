@@ -11,8 +11,8 @@
 #include "frequencies.h"
 #include "env.h"
 
-#define CONNECTING_TO_NETWORK "Connecting to network"
-#define NETWORK_CONNECTED "Network connected!"
+#define CONNECTING_TO_NETWORK_CLOCK "Connecting CLOCK"
+#define NETWORK_CONNECTED_CLOCK "Connected CLOCK!"
 #define CLOCK_INITIATED "Initiated CLOCK"
 
 WiFiUDP ntpUDP;
@@ -39,12 +39,11 @@ void CLOCK::initClock()
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while (WiFi.status() != WL_CONNECTED)
     {
-        delay(600);
-        OLED::write(CONNECTING_TO_NETWORK);
+        OLED::write(CONNECTING_TO_NETWORK_CLOCK);
     }
 
     connected = true;
-    OLED::write(NETWORK_CONNECTED);
+    OLED::write(NETWORK_CONNECTED_CLOCK);
 
     timeClient.begin();
     timeClient.update();

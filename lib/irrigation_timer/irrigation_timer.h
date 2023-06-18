@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef IRRIGATION_TIMER_H
 #define IRRIGATION_TIMER_H
@@ -14,6 +13,7 @@ typedef struct irrigation_schedule
 class IRRIGATION_TIMER
 {
 public:
+    static std::string scheduleToString(const irrigation_schedule &is);
     static void getSchedule();
     static void addSchedule();
     static void deleteSchedule();

@@ -11,7 +11,7 @@
 #define ESP_INIT_FAILED "Failed to init ESP"
 #define ESP_INIT_SUCCESS "Initiated ESP"
 #define ESP_AGNS_CONFIG_FAILED "Failed to configure AGNS node"
-#define ESP_AGNS_CONFIG_SUCCESS "AGNS node configured"
+#define ESP_AGNS_CONFIG_SUCCESS "Node registered"
 #define ESP_AGNS_NODES_CONNECTED "AGNS nodes registered: "
 #define ESP_SIGNAL_SENT "AGNS sent signal successfuly"
 #define ESP_SIGNAL_FAILED "AGNS failed to send signal"
@@ -38,7 +38,7 @@ private:
     int powerState;
 
 public:
-    static std::string printNodesConnected();
+    static std::string printNodesRegistered();
     static void initESP();
     static void configAGNSNodes();
     static void setPowerOn();
@@ -109,7 +109,7 @@ void TRANSMITTER::sendSignal()
     }
 };
 
-std::string TRANSMITTER::printNodesConnected()
+std::string TRANSMITTER::printNodesRegistered()
 {
     std::stringstream ss;
     ss << nodesConnected;
