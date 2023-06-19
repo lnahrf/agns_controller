@@ -9,7 +9,7 @@
 #include "env.h"
 
 unsigned long previousTime = 0;
-const int interval = 10000;
+const int interval = 30000;
 
 void setup()
 {

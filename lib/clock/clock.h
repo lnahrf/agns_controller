@@ -11,13 +11,14 @@
 #define CLOCK_INITIATED "Initiated CLOCK"
 
 struct tm timeinfo;
+time_t now;
 
 class CLOCK
 {
 
 public:
-    static void initClock();
     static void updateClient();
+    static void initClock();
     static int getWeekDay();
     static int getMonthDay();
     static int getMonth();
@@ -26,16 +27,18 @@ public:
     static std::string getDate();
 };
 
+void CLOCK::updateClient()
+{
+    time(&now);
+    localtime_r(&now, &timeinfo);
+};
+
 void CLOCK::initClock()
 {
     configTime(NTP_TZ_OFFSET_S, NTP_DAYLIGHT_OFFSET_S, NTP_POOL);
-    getLocalTime(&timeinfo);
+    delay(3000);
+    updateClient();
     OLED::write(CLOCK_INITIATED);
-};
-
-void CLOCK::updateClient()
-{
-    getLocalTime(&timeinfo);
 };
 
 int CLOCK::getWeekDay()

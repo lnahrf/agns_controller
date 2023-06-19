@@ -24,6 +24,7 @@ public:
 void EEPROM_IO::initEEPROM()
 {
     EEPROM.begin(EEPROM_SIZE);
+    overwriteSchedule("");
     OLED::write(INITIATED_EEPROM);
 };
 
@@ -70,7 +71,6 @@ void EEPROM_IO::appendSchedule(const std::string &s)
 
 void EEPROM_IO::deleteFromSchedule(const std::string &s)
 {
-
     std::string current = readSchedule();
     std::string formatted = S_UTILS::removeNullTerminators(current).c_str();
     std::string result = S_UTILS::replaceSubstr(formatted, s, "");
