@@ -24,7 +24,10 @@ public:
 void EEPROM_IO::initEEPROM()
 {
     EEPROM.begin(EEPROM_SIZE);
-    overwriteSchedule("");
+
+    if (RESET_EEPROM_ON_STARTUP)
+        overwriteSchedule("");
+
     OLED::write(INITIATED_EEPROM);
 };
 

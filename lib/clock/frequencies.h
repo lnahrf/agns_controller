@@ -1,6 +1,5 @@
 #define DAILY "DAILY"
 #define WEEKLY "WEEKLY"
-#define MONTHLY "MONTHLY"
 
 #define SUNDAY "Sunday"
 #define MONDAY "Monday"
