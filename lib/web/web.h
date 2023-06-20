@@ -21,6 +21,7 @@ private:
     static void rootRouter(AsyncWebServerRequest *request);
     static void styleRouter(AsyncWebServerRequest *request);
     static void assetsRouter(AsyncWebServerRequest *request);
+    static void modulesRouter(AsyncWebServerRequest *request);
     static void scheduleGETRouter(AsyncWebServerRequest *request);
     static void schedulePOSTRouter(AsyncWebServerRequest *request);
     static void scheduleDELETERouter(AsyncWebServerRequest *request);
@@ -65,6 +66,42 @@ void WEB::assetsRouter(AsyncWebServerRequest *request)
     {
         request->send(SPIFFS, "/assets/agns_logo.png", "image/png");
     }
+    return request->client()->close();
+};
+
+void WEB::modulesRouter(AsyncWebServerRequest *request)
+{
+    String url = request->url();
+
+    if (url.equals("/modules/index.js"))
+    {
+        request->send(SPIFFS, "/modules/index.js", "text/javascript");
+    }
+    else if (url.equals("/modules/schedule.js"))
+    {
+        request->send(SPIFFS, "/modules/schedule.js", "text/javascript");
+    }
+    else if (url.equals("/modules/form.js"))
+    {
+        request->send(SPIFFS, "/modules/form.js", "text/javascript");
+    }
+    else if (url.equals("/modules/format.js"))
+    {
+        request->send(SPIFFS, "/modules/format.js", "text/javascript");
+    }
+    else if (url.equals("/modules/service.js"))
+    {
+        request->send(SPIFFS, "/modules/service.js", "text/javascript");
+    }
+    else if (url.equals("/modules/handlers.js"))
+    {
+        request->send(SPIFFS, "/modules/handlers.js", "text/javascript");
+    }
+    else if (url.equals("/modules/frequencies.js"))
+    {
+        request->send(SPIFFS, "/modules/frequencies.js", "text/javascript");
+    }
+
     return request->client()->close();
 };
 
@@ -118,6 +155,7 @@ void WEB::initServer()
     server.on("/", HTTP_GET, rootRouter);
     server.on("/styles/*", HTTP_GET, styleRouter);
     server.on("/assets/*", HTTP_GET, assetsRouter);
+    server.on("/modules/*", HTTP_GET, modulesRouter);
     server.on("/schedule", HTTP_GET, scheduleGETRouter);
     server.on("/schedule", HTTP_POST, schedulePOSTRouter);
     server.on("/schedule", HTTP_DELETE, scheduleDELETERouter);

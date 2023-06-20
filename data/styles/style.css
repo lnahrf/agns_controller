@@ -1,3 +1,22 @@
+:root {
+    --blue: #0962b5;
+    --l-blue: #479ded;
+    --gray: #353535;
+    --red: #b20808;
+    --white: #ffffff;
+}
+
+#root{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+*{
+    box-sizing: border-box;
+}
+
 body, .header{
     display: flex;
     align-items: center;
@@ -8,8 +27,90 @@ body, .header{
 .header{
     padding-top: 50px;
 }
+
 .header p{
     margin-top:0;
     font-family: Arial, Helvetica, sans-serif;
-    color: #0962b5;
+    color: var(--blue);
+}
+
+.schedule-list{
+    margin:0;
+    padding:0;
+}
+
+.schedule-list-item{
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    border-radius: 5px;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.schedule-list-item-wrapper{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.schedule-list-item-type, .schedule-list-item-day, .schedule-list-item-hour{
+    margin-right: 5px;
+}
+
+.schedule-list-item-type{
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+}
+
+.schedule-list-item-hour{
+    width: 100%;
+}
+
+.schedule-list-item-delete{
+    color: var(--gray);
+    transition: all 0.2s ease-in-out;
+    margin-left: 10px;
+
+}
+
+.schedule-list-item-delete:hover{
+    color: var(--red);
+    cursor: pointer;
+}
+
+.schedule-form{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.type-input, .day-input,.hour-input, .minute-input{
+    margin-right: 5px;
+}
+.hour-input, .minute-input{
+    width: 50px;
+}
+
+.add-button{
+    display: inline;
+    background-color: var(--blue);
+    color: var(--white);
+    font-size: 32px;
+    font-weight: bold;
+    padding:0px 10px 0px 10px;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.add-button:hover{
+    background-color: var(--l-blue);
+    cursor: pointer;
 }

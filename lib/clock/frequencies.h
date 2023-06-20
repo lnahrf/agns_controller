@@ -1,5 +1,5 @@
-#define DAILY "DAILY"
-#define WEEKLY "WEEKLY"
+#define DAILY "Daily"
+#define WEEKLY "Weekly"
 
 #define SUNDAY "Sunday"
 #define MONDAY "Monday"
