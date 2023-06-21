@@ -58,14 +58,11 @@ void WEB::assetsRouter(AsyncWebServerRequest *request)
 {
     String url = request->url();
 
-    if (url.equals("/assets/favicon.ico"))
-    {
-        request->send(SPIFFS, "/assets/favicon.ico", "image/x-icon");
-    }
-    else if (url.equals("/assets/agns_logo.png"))
+    if (url.equals("/assets/agns_logo.png"))
     {
         request->send(SPIFFS, "/assets/agns_logo.png", "image/png");
     }
+
     return request->client()->close();
 };
 
