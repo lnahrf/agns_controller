@@ -97,4 +97,5 @@ void loop()
                                     return IRRIGATION_TIMER::startIrrigation(); });
 
     IRRIGATION_TIMER::irrigationHandler();
+    IRRIGATION_TIMER::irrigationScheduleHandler();
 }

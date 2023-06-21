@@ -3,9 +3,23 @@
 #define IRRIGATION_TIMER_H
 #include <Arduino.h>
 #include <string>
+#include <vector>
+#include "s_utils.h"
+#include "eeprom_io.h"
+#include "clock.h"
+#include "physical_io.h"
 
 const float VOLTAGE_LIMIT = 3.3;
 const int TIME_LIMIT_MIN = 30;
+
+typedef struct irrigation_schedule
+{
+    std::string type;
+    std::string day;
+    std::string hour;
+    float durationMinutes;
+
+} irrigation_schedule;
 
 typedef struct irrigation
 {
@@ -24,11 +38,37 @@ private:
     static int getIrrigationDuration(const float &vPercentage);
 
 public:
+    static irrigation_schedule formatIrrigationScheduleStr(const std::string &scheduleStr);
     static void setManualIrrigationDuration(const float &voltage);
     static irrigation getIrrigation();
     static void stopIrrigation();
     static void startIrrigation();
     static void irrigationHandler();
+    static void irrigationScheduleHandler();
+};
+
+irrigation_schedule IRRIGATION_TIMER::formatIrrigationScheduleStr(const std::string &scheduleStr)
+{
+    irrigation_schedule is;
+
+    std::string formatted = S_UTILS::removeWhitespace(scheduleStr);
+    std::vector<std::string> separated = S_UTILS::splitString(formatted, " ");
+
+    if (S_UTILS::startsWith(scheduleStr, DAILY))
+    {
+        is.type = DAILY;
+        is.durationMinutes = std::stoi(separated[1]);
+        is.hour = separated[2];
+    }
+    else if (S_UTILS::startsWith(scheduleStr, WEEKLY))
+    {
+        is.type = WEEKLY;
+        is.day = separated[1];
+        is.durationMinutes = std::stoi(separated[2]);
+        is.hour = separated[3];
+    }
+
+    return is;
 };
 
 int IRRIGATION_TIMER::getIrrigationDuration(const float &vPercentage)
@@ -84,17 +124,20 @@ irrigation IRRIGATION_TIMER::getIrrigation()
 
 void IRRIGATION_TIMER::stopIrrigation()
 {
-    Serial.println("Stopping irrigation");
     mainIrrigation.inProgress = false;
     mainIrrigation.startTimeMs = 0;
     mainIrrigation.elapsedMs = 0;
     mainIrrigation.elapsedSeconds = 0;
+
+    digitalWrite(INTERNAL_LED_PIN, LOW);
 };
 
 void IRRIGATION_TIMER::startIrrigation()
 {
     mainIrrigation.inProgress = true;
     mainIrrigation.startTimeMs = millis();
+
+    digitalWrite(INTERNAL_LED_PIN, HIGH);
 };
 
 void IRRIGATION_TIMER::irrigationHandler()
@@ -109,6 +152,38 @@ void IRRIGATION_TIMER::irrigationHandler()
     {
         stopIrrigation();
     }
-}
+};
+
+void IRRIGATION_TIMER::irrigationScheduleHandler()
+{
+
+    if (mainIrrigation.inProgress)
+        return;
+
+    std::string scheduleStr = EEPROM_IO::readSchedule();
+    std::vector<std::string> separated = S_UTILS::splitString(scheduleStr, SCHEDULE_SEPARATOR);
+
+    for (int i = 0; i < separated.size(); i++)
+    {
+        irrigation_schedule is = formatIrrigationScheduleStr(S_UTILS::removeWhitespace(separated[i]));
+
+        if (is.type == DAILY)
+        {
+            if (is.hour == CLOCK::getTime())
+            {
+                mainIrrigation.durationMinutes = is.durationMinutes;
+                startIrrigation();
+            }
+        }
+        else if (is.type == WEEKLY)
+        {
+            if (is.day == CLOCK::getWeekDayString() && is.hour == CLOCK::getTime())
+            {
+                mainIrrigation.durationMinutes = is.durationMinutes;
+                startIrrigation();
+            }
+        }
+    }
+};
 
 #endif

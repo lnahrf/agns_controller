@@ -26,5 +26,6 @@ export const formButtonHandler = () => {
 
 export const formTimeHandler = (el) => {
   const numeric = el.value.replace(/\D/g, "");
-  el.value = numeric;
+  const parsed = Number(numeric);
+  el.value = parsed < 10 ? "0" + parsed : parsed;
 };

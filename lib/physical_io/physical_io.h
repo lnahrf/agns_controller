@@ -3,6 +3,7 @@
 #define PHYSICAL_IO_H
 #include <Arduino.h>
 
+const int INTERNAL_LED_PIN = 2;
 const int BUTTON_COUNT = 2;
 const int POTENTIOMETER_COUNT = 1;
 const int LONG_PRESS_THRESHOLD_MS = 2000;
@@ -51,6 +52,8 @@ void PHYSICAL_IO::populateIO()
 {
     buttons[0] = MENU_BUTTON;
     potentiometers[0] = MANUAL_IRRIGATION_POT;
+
+    pinMode(INTERNAL_LED_PIN, OUTPUT);
 };
 
 button_io *PHYSICAL_IO::getButtonByPin(const int &PIN)

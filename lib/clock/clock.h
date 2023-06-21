@@ -20,6 +20,7 @@ public:
     static void updateClient();
     static void initClock();
     static int getWeekDay();
+    static std::string getWeekDayString();
     static int getMonthDay();
     static int getMonth();
     static int getYear();
@@ -42,8 +43,33 @@ void CLOCK::initClock()
 
 int CLOCK::getWeekDay()
 {
-    return timeinfo.tm_wday;
+    return timeinfo.tm_wday + 1;
 };
+
+std::string CLOCK::getWeekDayString()
+{
+    int day = getWeekDay();
+
+    switch (day)
+    {
+    case 1:
+        return SUNDAY;
+    case 2:
+        return MONDAY;
+    case 3:
+        return TUESDAY;
+    case 4:
+        return WEDNESDAY;
+    case 5:
+        return THURSDAY;
+    case 6:
+        return FRIDAY;
+    case 7:
+        return SATURDAY;
+    default:
+        return "";
+    }
+}
 
 int CLOCK::getMonthDay()
 {

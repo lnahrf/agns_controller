@@ -12,6 +12,7 @@ public:
     static std::string replaceSubstr(const std::string &original, const std::string &target, const std::string &replacement);
     static std::string removeNullTerminators(const std::string &s);
     static std::string removeWhitespace(const std::string &s);
+    static bool startsWith(const std::string &s, const std::string &t);
 };
 
 std::vector<std::string> S_UTILS::splitString(const std::string &s, const std::string &r)
@@ -55,6 +56,11 @@ std::string S_UTILS::removeWhitespace(const std::string &s)
         return result;
 
     return result.substr(firstLetter, lastLetter - firstLetter + 1);
+};
+
+bool S_UTILS::startsWith(const std::string &s, const std::string &t)
+{
+    return s.compare(0, t.length(), t) == 0;
 };
 
 #endif
