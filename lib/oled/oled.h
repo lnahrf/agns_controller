@@ -127,13 +127,7 @@ void OLED::renderScheduleScreen(const std::string &schedule)
 
     for (int i = 0; i < separated.size(); i++)
     {
-        std::string current = separated[i].c_str();
-
-        if (current.find(DAILY) != std::string::npos)
-            current = S_UTILS::replaceSubstr(current, DAILY, "D");
-        if (current.find(WEEKLY) != std::string::npos)
-            current = S_UTILS::replaceSubstr(current, WEEKLY, "W");
-
+        std::string current = S_UTILS::removeWhitespace(separated[i]);
         instance.setCursor(0, y);
         instance.println(current.c_str());
         y += 12;

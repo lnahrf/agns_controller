@@ -1,7 +1,7 @@
 import { renderForm } from "./form.js";
 import { formatSchedule, formatScheduleObj } from "./format.js";
 import { Daily, Weekly } from "./frequencies.js";
-import { formTypeHandler } from "./handlers.js";
+import { formButtonHandler, formTypeHandler } from "./handlers.js";
 import { getSchedule, removeSchedule } from "./service.js";
 
 export const renderScheduleItem = (scheduleStr) => {
@@ -10,6 +10,7 @@ export const renderScheduleItem = (scheduleStr) => {
 
   wrapper.className = "schedule-list-item-wrapper";
   let typeDiv;
+  let durationDiv;
   let hourDiv;
   let dayDiv;
 
@@ -19,29 +20,40 @@ export const renderScheduleItem = (scheduleStr) => {
       typeDiv.className = "schedule-list-item-type";
       typeDiv.innerText = scheduleObj.type;
 
+      durationDiv = document.createElement("div");
+      durationDiv.className = "schedule-list-item-duration";
+      durationDiv.innerText = scheduleObj.duration + " Min";
+
       hourDiv = document.createElement("div");
       hourDiv.className = "schedule-list-item-hour";
       hourDiv.innerText = scheduleObj.hour;
 
       wrapper.appendChild(typeDiv);
       wrapper.appendChild(hourDiv);
+      wrapper.appendChild(durationDiv);
+
       break;
     case Weekly:
       typeDiv = document.createElement("div");
       typeDiv.className = "schedule-list-item-type";
       typeDiv.innerText = scheduleObj.type;
 
+      durationDiv = document.createElement("div");
+      durationDiv.className = "schedule-list-item-duration";
+      durationDiv.innerText = scheduleObj.duration + " Min";
+
       hourDiv = document.createElement("div");
       hourDiv.className = "schedule-list-item-hour";
       hourDiv.innerText = scheduleObj.hour;
 
       dayDiv = document.createElement("div");
-      dayDiv.className = "schedule-list-item-hour";
+      dayDiv.className = "schedule-list-item-day";
       dayDiv.innerText = scheduleObj.day;
 
       wrapper.appendChild(typeDiv);
       wrapper.appendChild(dayDiv);
       wrapper.appendChild(hourDiv);
+      wrapper.appendChild(durationDiv);
       break;
     default:
       break;
@@ -76,9 +88,9 @@ export const startLoading = () => {
 
 export const stopLoading = () => {
   const root = document.getElementById("root");
-  root.style.pointerEvents = "auto";
+  root.style.pointerEvents = "inherit";
   root.style.opacity = "1";
-  root.style.cursor = "pointer";
+  root.style.cursor = "auto";
 };
 
 export const renderSchedule = async () => {
@@ -102,6 +114,7 @@ export const renderSchedule = async () => {
   root.appendChild(list);
   root.appendChild(form);
   formTypeHandler(Daily);
+  formButtonHandler();
 
   stopLoading();
 };

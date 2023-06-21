@@ -86,7 +86,6 @@ void loop()
     renderHandler(current);
     screenFunctionalityHandler(current);
     intervalHandler();
-
     NETWORK::validateConnection();
 
     PHYSICAL_IO::handleButtonIO(MENU_BUTTON.pin, OLED::nextScreen, [current]()

@@ -36,7 +36,6 @@ void CLOCK::updateClient()
 void CLOCK::initClock()
 {
     configTime(NTP_TZ_OFFSET_S, NTP_DAYLIGHT_OFFSET_S, NTP_POOL);
-    delay(3000);
     updateClient();
     OLED::write(CLOCK_INITIATED);
 };

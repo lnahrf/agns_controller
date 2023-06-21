@@ -1,6 +1,9 @@
 :root {
     --blue: #0962b5;
     --l-blue: #479ded;
+    --green: #7db209;
+    --orange: #ff9e07;
+    --turquoise: #00bfd3;
     --gray: #353535;
     --red: #b20808;
     --white: #ffffff;
@@ -37,6 +40,8 @@ body, .header{
 .schedule-list{
     margin:0;
     padding:0;
+    width: 100%;
+    max-width: 325px;
 }
 
 .schedule-list-item{
@@ -56,12 +61,16 @@ body, .header{
 .schedule-list-item-wrapper{
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
-.schedule-list-item-type, .schedule-list-item-day, .schedule-list-item-hour{
+.schedule-list-item-type, .schedule-list-item-day, .schedule-list-item-hour, .schedule-list-item-duration{
     margin-right: 5px;
+}
+.schedule-list-item-day, .schedule-list-item-hour, .schedule-list-item-duration{
+    margin-right: 5px;
+    width: auto;
 }
 
 .schedule-list-item-type{
@@ -71,14 +80,32 @@ body, .header{
     border-radius: 5px;
 }
 
+.schedule-list-item-day{
+    background-color: var(--green);
+    color: var(--white);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+}
+
 .schedule-list-item-hour{
-    width: 100%;
+    background-color: var(--orange);
+    color: var(--white);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
+}
+
+.schedule-list-item-duration{
+    background-color: var(--turquoise);
+    color: var(--white);
+    padding: 2px 5px 2px 5px;
+    border-radius: 5px;
 }
 
 .schedule-list-item-delete{
     color: var(--gray);
     transition: all 0.2s ease-in-out;
     margin-left: 10px;
+    margin-left: auto;
 
 }
 
@@ -92,7 +119,7 @@ body, .header{
     justify-content: center;
     width: 100%;
 }
-.type-input, .day-input,.hour-input, .minute-input{
+.type-input, .day-input,.hour-input, .minute-input, .duration-input{
     margin-right: 5px;
 }
 .hour-input, .minute-input{

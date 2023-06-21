@@ -10,6 +10,7 @@ export const formatSchedule = (scheduleStr) => {
 export const formatScheduleObj = (scheduleStr) => {
   let scheduleObj = {
     type: null,
+    duration: null,
     hour: null,
     day: null,
   };
@@ -19,11 +20,13 @@ export const formatScheduleObj = (scheduleStr) => {
 
   if (scheduleStr.includes(Daily)) {
     scheduleObj.type = formatted[0];
-    scheduleObj.hour = formatted[1];
+    scheduleObj.duration = formatted[1];
+    scheduleObj.hour = formatted[2];
   } else if (scheduleStr.includes(Weekly)) {
     scheduleObj.type = formatted[0];
     scheduleObj.day = formatted[1];
-    scheduleObj.hour = formatted[2];
+    scheduleObj.duration = formatted[2];
+    scheduleObj.hour = formatted[3];
   }
 
   return scheduleObj;

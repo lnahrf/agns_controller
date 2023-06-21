@@ -26,7 +26,7 @@ void EEPROM_IO::initEEPROM()
     EEPROM.begin(EEPROM_SIZE);
 
     if (RESET_EEPROM_ON_STARTUP)
-        overwriteSchedule("Daily 20:30; Weekly Sunday 18:20;");
+        overwriteSchedule("Daily 30 20:30; Weekly Sunday 10 18:20;");
 
     OLED::write(INITIATED_EEPROM);
 };

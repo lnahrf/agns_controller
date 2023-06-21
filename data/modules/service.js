@@ -7,7 +7,6 @@ export const getSchedule = async () => {
     });
 
     const parsed = await result.json();
-
     return parsed?.schedule;
   } catch (err) {
     console.error(err);
@@ -15,9 +14,11 @@ export const getSchedule = async () => {
   }
 };
 
-export const addSchedule = async (type, day, hour) => {
+export const addSchedule = async (type, day, hour, duration) => {
   const scheduleStr =
-    type === Daily ? `${type} ${hour};` : `${type} ${day} ${hour};`;
+    type === Daily
+      ? `${type} ${duration} ${hour};`
+      : `${type} ${day} ${duration} ${hour};`;
   try {
     const result = await fetch(`/schedule?schedule=${scheduleStr}`, {
       method: "POST",

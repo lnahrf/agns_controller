@@ -11,6 +11,7 @@ public:
     static std::vector<std::string> splitString(const std::string &s, const std::string &r);
     static std::string replaceSubstr(const std::string &original, const std::string &target, const std::string &replacement);
     static std::string removeNullTerminators(const std::string &s);
+    static std::string removeWhitespace(const std::string &s);
 };
 
 std::vector<std::string> S_UTILS::splitString(const std::string &s, const std::string &r)
@@ -41,6 +42,19 @@ std::string S_UTILS::removeNullTerminators(const std::string &s)
                                 { return c == '\0'; }),
                  result.end());
     return result;
+};
+
+std::string S_UTILS::removeWhitespace(const std::string &s)
+{
+    std::string result = s.c_str();
+
+    size_t firstLetter = result.find_first_not_of(" \t");
+    size_t lastLetter = result.find_last_not_of(" \t");
+
+    if (firstLetter == std::string::npos)
+        return result;
+
+    return result.substr(firstLetter, lastLetter - firstLetter + 1);
 };
 
 #endif
