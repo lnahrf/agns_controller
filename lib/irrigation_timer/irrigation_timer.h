@@ -8,6 +8,7 @@
 #include "eeprom_io.h"
 #include "clock.h"
 #include "physical_io.h"
+#include "transmitter.h"
 
 const float VOLTAGE_LIMIT = 3.3;
 const int TIME_LIMIT_MIN = 30;
@@ -129,6 +130,7 @@ void IRRIGATION_TIMER::stopIrrigation()
     mainIrrigation.elapsedMs = 0;
     mainIrrigation.elapsedSeconds = 0;
 
+    TRANSMITTER::setPowerOff();
     digitalWrite(INTERNAL_LED_PIN, LOW);
 };
 
@@ -137,6 +139,7 @@ void IRRIGATION_TIMER::startIrrigation()
     mainIrrigation.inProgress = true;
     mainIrrigation.startTimeMs = millis();
 
+    TRANSMITTER::setPowerOn();
     digitalWrite(INTERNAL_LED_PIN, HIGH);
 };
 
