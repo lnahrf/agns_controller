@@ -64,14 +64,17 @@ void renderHandler(const int &current)
 {
     switch (current)
     {
-    case 0:
+    case MAIN_SCREEN:
         return OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(),
                                       CLOCK::getTime(),
                                       CLOCK::getDate(),
                                       NETWORK::getIp());
-    case 1:
-        return OLED::renderScheduleScreen(EEPROM_IO::readSchedule());
-    case 2:
+    case SCHEDULE_SCREEN:
+        char buffer[EEPROM_SIZE];
+        EEPROM_IO::readSchedule(buffer);
+        OLED::renderScheduleScreen(buffer);
+        return;
+    case IRRIGATION_SCREEN:
         return OLED::renderIrrigationScreen(IRRIGATION_TIMER::getIrrigation().inProgress,
                                             IRRIGATION_TIMER::getIrrigation().durationMinutes,
                                             IRRIGATION_TIMER::getIrrigation().elapsedSeconds);
@@ -100,6 +103,7 @@ void loop()
 {
     int current = OLED::getCurrentScreen();
     bool inProgress = IRRIGATION_TIMER::getIrrigation().inProgress;
+
     renderHandler(current);
     screenFunctionalityHandler(current);
     clockIntervalHandler();
@@ -107,7 +111,7 @@ void loop()
     NETWORK::validateConnection();
     PHYSICAL_IO::handleButtonIO(MENU_BUTTON.pin, OLED::nextScreen, [current, inProgress]()
                                 {
-                                    if(current != 2) return;
+                                    if(current != IRRIGATION_SCREEN) return;
                                     if(inProgress)
                                         return IRRIGATION_TIMER::stopIrrigation();
 

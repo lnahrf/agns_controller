@@ -8,7 +8,7 @@ import {
   Tuesday,
   Wednesday,
   Weekly,
-} from "./frequencies.js";
+} from "./enums.js";
 import {
   formButtonHandler,
   formTimeHandler,

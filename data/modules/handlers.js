@@ -1,4 +1,4 @@
-import { Daily } from "./frequencies.js";
+import { Daily } from "./enums.js";
 
 export const formTypeHandler = (type) => {
   if (type === Daily)
@@ -25,7 +25,10 @@ export const formButtonHandler = () => {
 };
 
 export const formTimeHandler = (el) => {
+  const className = el.className;
+  const threshold = className === "minute-input" ? 59 : 23;
   const numeric = el.value.replace(/\D/g, "");
   const parsed = Number(numeric);
-  el.value = parsed < 10 ? "0" + parsed : parsed;
+  el.value =
+    parsed < 10 ? "0" + parsed : parsed > threshold ? threshold : parsed;
 };

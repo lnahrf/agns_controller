@@ -1,4 +1,4 @@
-import { Daily } from "./frequencies.js";
+import { Daily } from "./enums.js";
 
 export const getSchedule = async () => {
   try {

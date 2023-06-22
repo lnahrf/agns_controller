@@ -8,3 +8,5 @@ export const Wednesday = "Wednesday";
 export const Thursday = "Thursday";
 export const Friday = "Friday";
 export const Saturday = "Saturday";
+
+export const SCHEDULE_SEPARATOR = ";";

@@ -94,9 +94,9 @@ void WEB::modulesRouter(AsyncWebServerRequest *request)
     {
         request->send(SPIFFS, "/modules/handlers.js", "text/javascript");
     }
-    else if (url.equals("/modules/frequencies.js"))
+    else if (url.equals("/modules/enums.js"))
     {
-        request->send(SPIFFS, "/modules/frequencies.js", "text/javascript");
+        request->send(SPIFFS, "/modules/enums.js", "text/javascript");
     }
 
     return request->client()->close();
@@ -104,10 +104,12 @@ void WEB::modulesRouter(AsyncWebServerRequest *request)
 
 void WEB::scheduleGETRouter(AsyncWebServerRequest *request)
 {
-    std::string schedule = EEPROM_IO::readSchedule();
+    char buffer[EEPROM_SIZE];
+    EEPROM_IO::readSchedule(buffer);
 
+    size_t charCount = sizeof(buffer) / sizeof(char);
     DynamicJsonDocument doc(512);
-    doc["schedule"] = schedule.size() > 0 ? schedule : "";
+    doc["schedule"] = charCount > 0 ? buffer : "";
 
     String jsonStringified;
     serializeJson(doc, jsonStringified);

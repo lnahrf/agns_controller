@@ -1,7 +1,7 @@
-import { Daily, Weekly } from "./frequencies.js";
+import { Daily, Weekly, SCHEDULE_SEPARATOR } from "./enums.js";
 
 export const formatSchedule = (scheduleStr) => {
-  const arr = scheduleStr.split(";");
+  const arr = scheduleStr.split(SCHEDULE_SEPARATOR);
   const filtered = arr.filter((a) => a != "");
 
   return filtered;

@@ -160,8 +160,9 @@ void IRRIGATION_TIMER::irrigationScheduleHandler()
     if (mainIrrigation.inProgress)
         return;
 
-    std::string scheduleStr = EEPROM_IO::readSchedule();
-    std::vector<std::string> separated = S_UTILS::splitString(scheduleStr, SCHEDULE_SEPARATOR);
+    char buffer[EEPROM_SIZE];
+    EEPROM_IO::readSchedule(buffer);
+    std::vector<std::string> separated = S_UTILS::splitString(buffer, SCHEDULE_SEPARATOR);
 
     for (int i = 0; i < separated.size(); i++)
     {

@@ -1,6 +1,6 @@
 import { renderForm } from "./form.js";
 import { formatSchedule, formatScheduleObj } from "./format.js";
-import { Daily, Weekly } from "./frequencies.js";
+import { Daily, Weekly } from "./enums.js";
 import { formButtonHandler, formTypeHandler } from "./handlers.js";
 import { getSchedule, removeSchedule } from "./service.js";
 

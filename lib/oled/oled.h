@@ -22,10 +22,14 @@
 #define OLED_ALLOC_FAILURE "SSD1306 allocation failed"
 #define OLED_INITIATED "Initiated OLED"
 
-Adafruit_SSD1306 instance(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
+const int MAIN_SCREEN = 0;
+const int SCHEDULE_SCREEN = 1;
+const int IRRIGATION_SCREEN = 2;
 const int SCREEN_COUNT = 3;
+
 int currentScreen = 0;
+
+Adafruit_SSD1306 instance(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 class OLED
 {
@@ -37,7 +41,7 @@ public:
     static void write(const std::string &s);
     static void nextScreen();
     static void renderMainScreen(const std::string &nodesConnected, const std::string &time, const std::string &date, const std::string &ip);
-    static void renderScheduleScreen(const std::string &schedule);
+    static void renderScheduleScreen(char *schedule);
     static void renderIrrigationScreen(const bool &inProgress, const int &durationMinutes, const float &elapsedSeconds);
 };
 
@@ -112,7 +116,7 @@ void OLED::nextScreen()
     }
 }
 
-void OLED::renderScheduleScreen(const std::string &schedule)
+void OLED::renderScheduleScreen(char *schedule)
 {
 
     instance.clearDisplay();
@@ -123,7 +127,7 @@ void OLED::renderScheduleScreen(const std::string &schedule)
     instance.drawLine(0, 10, SCREEN_WIDTH, 10, WHITE);
     int y = 15;
 
-    std::vector<std::string> separated = S_UTILS::splitString(schedule.c_str(), SCHEDULE_SEPARATOR);
+    std::vector<std::string> separated = S_UTILS::splitString(schedule, SCHEDULE_SEPARATOR);
 
     for (int i = 0; i < separated.size(); i++)
     {
