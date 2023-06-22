@@ -10,8 +10,11 @@
 #include "irrigation_timer.h"
 #include "env.h"
 
-unsigned long previousTime = 0;
-const int interval = 30000;
+unsigned long clockPreviousTime = 0;
+const int clockInterval = 30000;
+
+unsigned long signalPreviousTime = 0;
+const int signalInterval = 1000;
 
 void setup()
 {
@@ -32,14 +35,28 @@ void setup()
     OLED::renderMainScreen(TRANSMITTER::printNodesRegistered(), CLOCK::getTime(), CLOCK::getDate(), NETWORK::getIp());
 }
 
-void intervalHandler()
+void clockIntervalHandler()
 {
     unsigned long currentTime = millis();
 
-    if (currentTime - previousTime >= interval)
+    if (currentTime - clockPreviousTime >= clockInterval)
     {
         CLOCK::updateClient();
-        previousTime = currentTime;
+        clockPreviousTime = currentTime;
+    }
+}
+
+void signalIntervalHandler(const bool &inProgress)
+{
+    if (!inProgress)
+        return;
+
+    unsigned long currentTime = millis();
+
+    if (currentTime - signalPreviousTime >= signalInterval)
+    {
+        TRANSMITTER::sendSignal();
+        signalPreviousTime = currentTime;
     }
 }
 
@@ -82,20 +99,22 @@ void screenFunctionalityHandler(const int &current)
 void loop()
 {
     int current = OLED::getCurrentScreen();
-
+    bool inProgress = IRRIGATION_TIMER::getIrrigation().inProgress;
     renderHandler(current);
     screenFunctionalityHandler(current);
-    intervalHandler();
-    NETWORK::validateConnection();
+    clockIntervalHandler();
 
-    PHYSICAL_IO::handleButtonIO(MENU_BUTTON.pin, OLED::nextScreen, [current]()
+    NETWORK::validateConnection();
+    PHYSICAL_IO::handleButtonIO(MENU_BUTTON.pin, OLED::nextScreen, [current, inProgress]()
                                 {
                                     if(current != 2) return;
-                                    if(IRRIGATION_TIMER::getIrrigation().inProgress)
+                                    if(inProgress)
                                         return IRRIGATION_TIMER::stopIrrigation();
 
                                     return IRRIGATION_TIMER::startIrrigation(); });
 
     IRRIGATION_TIMER::irrigationHandler();
     IRRIGATION_TIMER::irrigationScheduleHandler();
+
+    signalIntervalHandler(inProgress);
 }
