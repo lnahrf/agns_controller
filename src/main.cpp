@@ -14,7 +14,6 @@ unsigned long clockPreviousTime = 0;
 const int clockInterval = 30000;
 
 unsigned long signalPreviousTime = 0;
-const int signalInterval = 1000;
 
 void setup()
 {
@@ -53,7 +52,7 @@ void signalIntervalHandler(const bool &inProgress)
 
     unsigned long currentTime = millis();
 
-    if (currentTime - signalPreviousTime >= signalInterval)
+    if (currentTime - signalPreviousTime >= IRRIGATION_SIGNAL_INTERVAL)
     {
         TRANSMITTER::sendSignal();
         signalPreviousTime = currentTime;

@@ -16,10 +16,10 @@
 #define ESP_SIGNAL_SENT "AGNS sent signal successfuly"
 #define ESP_SIGNAL_FAILED "AGNS failed to send signal"
 
-typedef struct message
+typedef struct state
 {
     bool power;
-} message;
+} state;
 
 struct node
 {
@@ -30,7 +30,7 @@ struct node
 node nodes[NUM_OF_AGNS_NODES];
 size_t nodesConnected = 0;
 
-message payload;
+state outgoingState;
 
 class TRANSMITTER
 {
@@ -84,19 +84,19 @@ void TRANSMITTER::configAGNSNodes()
 
 void TRANSMITTER::setPowerOn()
 {
-    payload.power = true;
+    outgoingState.power = true;
 };
 
 void TRANSMITTER::setPowerOff()
 {
-    payload.power = false;
+    outgoingState.power = false;
 };
 
 void TRANSMITTER::sendSignal()
 {
     for (int i = 0; i < NUM_OF_AGNS_NODES; i++)
     {
-        esp_err_t result = esp_now_send(nodes[i].broadcastAddress, (uint8_t *)&payload, sizeof(payload));
+        esp_err_t result = esp_now_send(nodes[i].broadcastAddress, (uint8_t *)&outgoingState, sizeof(outgoingState));
         if (result != ESP_OK)
         {
             Serial.println(ESP_SIGNAL_FAILED);
